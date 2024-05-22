@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,8 +21,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject marker;
     Vector3 markerOrigin;
 
+    [SerializeField] ParticleSystem particleSys;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip[] call;
+
     void Start()
     {
+        particleSys = GetComponentInChildren<ParticleSystem>();
+        audioSource = GetComponent<AudioSource>();
+
         markerOrigin = marker.transform.position;
         forward = Camera.main.transform.forward;
         forward.y = 0;
@@ -83,7 +91,11 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(uiController.showCall());
+            //audioSource.clip = call[1];
+            //audioSource.Play();
+            playCallFour();
+            //StartCoroutine(uiController.showCall());
+            StartCoroutine(Pulse());
             Call();
         }
 
@@ -155,4 +167,34 @@ public class PlayerController : MonoBehaviour
         //memberSc.SetToFollow(this.gameObject.transform.position);
     }
 
+    public void playCallOne()
+    {
+        audioSource.clip = call[0];
+        audioSource.Play();
+    }
+
+    public void playCallTwo()
+    {
+        audioSource.clip = call[1];
+        audioSource.Play();
+    }
+
+    public void playCallThree()
+    {
+        audioSource.clip = call[2];
+        audioSource.Play();
+    }
+
+    public void playCallFour()
+    {
+        audioSource.clip = call[3];
+        audioSource.Play();
+    }
+
+    IEnumerator Pulse()
+    {
+        particleSys.Play();
+        yield return new WaitForSeconds(1f);
+        particleSys.Stop();
+    }
 }

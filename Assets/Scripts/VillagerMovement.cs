@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
@@ -8,18 +9,20 @@ public class VillagerMovement : MonoBehaviour, IPointerDownHandler
     public bool isReady = false;
     private NavMeshAgent agent;
     [SerializeField] private GameObject marker;
+    [SerializeField] private PlayerController playerController;
     //public int ignoreLayer1 = 9;
     //public int ignoreLayer2 = 10;
     //public int ignoreLayerCombo;
     //public LayerMask ignoreLayerMask;
     private Ray ray;
     private RaycastHit hit;
+    private AudioSource audioSource;
 
     void Start()
     {
         // ignoreLayerCombo = (1 << ignoreLayer1) | (1 << ignoreLayer2);
         // ignoreLayerCombo = ~ignoreLayerCombo;
-
+        audioSource = GetComponent<AudioSource>();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -37,8 +40,11 @@ public class VillagerMovement : MonoBehaviour, IPointerDownHandler
 
             if (Physics.Raycast(ray, out hit))
             {
+                playerController.playCallThree();
+                StartCoroutine(playSound(hit));
                 // Debug.Log("Hit" + hit.collider.gameObject.name, hit.collider.gameObject);
-                agent.SetDestination(hit.point);
+
+                //agent.SetDestination(hit.point);
                 marker.transform.position = hit.point;
             }
         }
@@ -64,5 +70,12 @@ public class VillagerMovement : MonoBehaviour, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         throw new System.NotImplementedException();
+    }
+
+    IEnumerator playSound(RaycastHit hit)
+    {
+        yield return new WaitForSeconds(1.2f);
+        audioSource.Play();
+        agent.SetDestination(hit.point);
     }
 }

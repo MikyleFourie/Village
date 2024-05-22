@@ -5,7 +5,7 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     [SerializeField] private GameObject dialoguePanel;
-    [SerializeField] private GameObject callPanel;
+    //[SerializeField] private GameObject callPanel;
     [SerializeField] private TextMeshProUGUI textMesh;
     [SerializeField] private GameObject redPanel;
     [SerializeField] private GameObject tutorialPanel;
@@ -56,22 +56,22 @@ public class UIController : MonoBehaviour
 
     }
 
-    public IEnumerator showCall()
-    {
+    //public IEnumerator showCall()
+    //{
 
-        callPanel.SetActive(true);
+    //    callPanel.SetActive(true);
 
-        yield return new WaitForSeconds(2f);
+    //    yield return new WaitForSeconds(2f);
 
-        callPanel.SetActive(false);
+    //    callPanel.SetActive(false);
 
-    }
+    //}
 
     public void EndGame()
     {
         player.SetActive(false);
         dialoguePanel.SetActive(false);
-        callPanel.SetActive(false);
+        //callPanel.SetActive(false);
         redPanel.SetActive(false);
         tutorialPanel.SetActive(false);
         endGamePanel.SetActive(true);
