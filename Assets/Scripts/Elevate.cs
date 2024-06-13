@@ -28,7 +28,7 @@ public class Elevate : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "v1" || other.tag == "Player")
+        if (other.tag == "villager" || other.tag == "Player")
         {
             if (other.tag == "Player")
             {
@@ -47,7 +47,7 @@ public class Elevate : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "v1" || other.tag == "Player")
+        if (other.tag == "villager" || other.tag == "Player")
         {
             numInTrig--;
             StopCoroutine(currCo);
@@ -66,7 +66,7 @@ public class Elevate : MonoBehaviour
 
         if (pos == 0)
         {
-            Debug.Log("Ping");
+            // Debug.Log("Ping");
             while (timeElapsed < dur)
             {
                 t = timeElapsed / dur;
@@ -82,7 +82,7 @@ public class Elevate : MonoBehaviour
 
         if (pos == 1)
         {
-            Debug.Log("Ping");
+            //Debug.Log("Ping");
             while (timeElapsed < dur)
             {
                 t = timeElapsed / dur;
@@ -98,7 +98,7 @@ public class Elevate : MonoBehaviour
 
         if (pos == 2)
         {
-            Debug.Log("Ping");
+            //Debug.Log("Ping");
             while (timeElapsed < dur)
             {
                 t = timeElapsed / dur;

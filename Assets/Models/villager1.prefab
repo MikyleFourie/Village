@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 8596326715240219651}
   - component: {fileID: 2042032739}
   - component: {fileID: 732934883827278614}
-  - component: {fileID: 195203511}
   m_Layer: 0
   m_Name: villager1
   m_TagString: Untagged
@@ -47,7 +46,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 243753040678768192}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.63
+  m_Radius: 0.72
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -72,10 +71,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8f76aa16f384e4e9262d4949acd43a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vCol: red
   isOnTeam: 0
-  isReady: 0
+  isFollowing: 0
   marker: {fileID: 0}
   playerController: {fileID: 0}
+  playerPos: {fileID: 0}
+  PlayerController: {fileID: 0}
 --- !u!54 &2042032739
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -188,21 +190,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!166 &195203511
-AudioChorusFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 243753040678768192}
-  m_Enabled: 1
-  m_DryMix: 0.5
-  m_WetMix1: 0.5
-  m_WetMix2: 0.5
-  m_WetMix3: 0.5
-  m_Delay: 40
-  m_Rate: 0.8
-  m_Depth: 0.03
 --- !u!1 &7358254291525172237
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,7 +206,7 @@ GameObject:
   - component: {fileID: 1304134895755049013}
   m_Layer: 0
   m_Name: Body
-  m_TagString: v1
+  m_TagString: villager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

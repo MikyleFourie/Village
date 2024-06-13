@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    bool redToggled = false;
+    public bool redToggled = false;
     [SerializeField] private UIController uiController;
     [SerializeField] private float moveSpeed = 4f;
 
@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     Vector3 direction, rightMovement, upmovement, heading;
 
     [SerializeField] List<string> tempteam = new List<string>();
-    [SerializeField] List<string> permteam = new List<string>();
+    [SerializeField] List<string> redteam = new List<string>();
     public GameObject temp;
     public VillagerMovement tempVMscript;
 
@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
 
         markerOrigin = marker.transform.position;
+
+        //Sets the directional axes for the game
         forward = Camera.main.transform.forward;
         forward.y = 0;
         forward = Vector3.Normalize(forward);
@@ -42,9 +44,10 @@ public class PlayerController : MonoBehaviour
     {
         if (redToggled)
         {
+            //Projects marker orb to ray
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            Debug.DrawRay(ray.origin, 100f * ray.direction, Color.green);
+            Debug.DrawRay(ray.origin, 100f * ray.direction, Color.red);
 
             if (Physics.Raycast(ray, out hit))
             {
@@ -58,17 +61,20 @@ public class PlayerController : MonoBehaviour
         }
 
 
-
+        //Handles movement
         if (Input.anyKey)
             Move();
 
+        //Toggles the RED state on
         if (Input.GetKeyDown(KeyCode.R))
         {
+            //UI overlay
             redToggled = uiController.toggleRed();
 
+            /*
             if (redToggled)
             {
-                foreach (var item in permteam)
+                foreach (var item in tempteam) //Make every Villager in TempTeam ready to move
                 {
                     temp = GameObject.Find(item);
                     tempVMscript = temp.GetComponent<VillagerMovement>();
@@ -78,7 +84,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                foreach (var item in permteam)
+                foreach (var item in tempteam)
                 {
                     temp = GameObject.Find(item);
                     tempVMscript = temp.GetComponent<VillagerMovement>();
@@ -86,7 +92,7 @@ public class PlayerController : MonoBehaviour
                     tempVMscript.isReady = false;
                 }
             }
-
+            */
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -97,6 +103,49 @@ public class PlayerController : MonoBehaviour
             //StartCoroutine(uiController.showCall());
             StartCoroutine(Pulse());
             Call();
+        }
+
+
+
+        if (redToggled && Input.GetMouseButtonDown(0))
+        {
+            //Debug.Log("Clicked");
+            //redToggled = uiController.toggleRed();
+            //Debug.Log("redToggled:" + redToggled);
+
+
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                playCallThree();
+
+                //temp = GameObject.Find(redteam[0]);
+                //
+                //tempVMscript = temp.GetComponent<VillagerMovement>();
+                //
+                //if (tempVMscript != null && tempVMscript.isFollowing)
+                //{
+                //    StartCoroutine(tempVMscript.playSound(hit));
+                //}
+
+                foreach (var item in redteam)
+                {
+                    temp = GameObject.Find(item);
+
+                    tempVMscript = temp.GetComponent<VillagerMovement>();
+
+                    if (tempVMscript != null && tempVMscript.isFollowing)
+                    {
+                        uiController.RemoveFromFollowing();
+                        uiController.AddToPlaced();
+                        StartCoroutine(tempVMscript.playSound(hit));
+                        break;
+                    }
+                }
+
+
+
+            }
         }
 
     }
@@ -117,7 +166,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "v1")
+        if (other.gameObject.tag == "villager")
             tempteam.Add(other.transform.parent.name);
 
 
@@ -126,46 +175,74 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "v1")
+        if (other.gameObject.tag == "villager")
             tempteam.Remove(other.transform.parent.name);
     }
 
     private void Call()
     {
 
-        foreach (var item in tempteam)
+        if (redToggled)
         {
-            temp = GameObject.Find(item);
-
-            tempVMscript = temp.GetComponent<VillagerMovement>();
-
-            if (tempVMscript != null)
+            redToggled = uiController.toggleRed();
+            foreach (var item in redteam)
             {
-                if (!tempVMscript.isOnTeam)
+
+
+
+                //Get all Red Team members to follow
+                temp = GameObject.Find(item);
+                tempVMscript = temp.GetComponent<VillagerMovement>();
+
+
+                if (!tempVMscript.isFollowing)
                 {
-                    permteam.Add(item);
-                    tempVMscript.isOnTeam = true;
-                    // AddToTeam(item, tempVMscript);
+                    uiController.RemoveFromPlaced();
+                    uiController.AddToFollowing();
                 }
+
+                tempVMscript.SetStoppingDistance(2.5f);
+                tempVMscript.StartFollowing();
+
+
             }
-
-
         }
-
-        foreach (var item in permteam)
+        else
         {
-            temp = GameObject.Find(item);
-            tempVMscript = temp.GetComponent<VillagerMovement>();
+            foreach (var item in tempteam)
+            {
+                temp = GameObject.Find(item);
 
-            tempVMscript.RecallAll(this.gameObject.transform.position);
+                tempVMscript = temp.GetComponent<VillagerMovement>();
+
+                if (tempVMscript != null && !tempVMscript.isOnTeam)
+                {
+                    if (tempVMscript.vCol == "red")
+                    {
+                        //Add to red team and set to follow
+
+                        redteam.Add(item);
+                        tempVMscript.isOnTeam = true;
+                        tempVMscript.SetStoppingDistance(2.5f);
+                        tempVMscript.StartFollowing();
+
+                        uiController.AddToFollowing();
+                    }
+                }
+
+
+            }
         }
+
+
+
     }
 
-    private void AddToTeam(string member, VillagerMovement memberSc)
-    {
-        //permteam.Add(member);
-        //memberSc.SetToFollow(this.gameObject.transform.position);
-    }
+    //private void AddToTeam(string member, VillagerMovement memberSc)
+    //{
+    //    //permteam.Add(member);
+    //    //memberSc.SetToFollow(this.gameObject.transform.position);
+    //}
 
     public void playCallOne()
     {
@@ -181,6 +258,7 @@ public class PlayerController : MonoBehaviour
 
     public void playCallThree()
     {
+        redToggled = uiController.toggleRed();
         audioSource.clip = call[2];
         audioSource.Play();
     }
