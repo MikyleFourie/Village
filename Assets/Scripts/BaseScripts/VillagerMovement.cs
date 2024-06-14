@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class VillagerMovement : MonoBehaviour, IPointerDownHandler
 {
-    public string vCol = "red";
+    //public string vCol = "red";
     public bool isOnTeam = false;
 
     public bool isFollowing = false;
@@ -20,49 +20,35 @@ public class VillagerMovement : MonoBehaviour, IPointerDownHandler
     private Ray ray;
     private RaycastHit hit;
     private AudioSource audioSource;
-    [SerializeField] private PlayerController PlayerController;
+    // [SerializeField] private PlayerController PlayerController;
 
 
     void Start()
     {
-        // ignoreLayerCombo = (1 << ignoreLayer1) | (1 << ignoreLayer2);
-        // ignoreLayerCombo = ~ignoreLayerCombo;
+
         audioSource = GetComponent<AudioSource>();
         agent = GetComponent<NavMeshAgent>();
-        PlayerController = GameObject.Find("Player").GetComponent<PlayerController>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         //The ray from the camera looking for collisions
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         //Debug.DrawRay(ray.origin, 100f * ray.direction, Color.green);
 
-
+        //Follows if true
         if (isFollowing)
         {
             agent.SetDestination(playerPos.position);
         }
 
-        //if (Input.GetMouseButtonDown(0) && isReady)
-        //{
-        //    //Debug.Log("Fired");
-
-        //    if (Physics.Raycast(ray, out hit))
-        //    {
-        //        playerController.playCallThree();
-        //        StartCoroutine(playSound(hit));
-        //        // Debug.Log("Hit" + hit.collider.gameObject.name, hit.collider.gameObject);
-
-        //        //agent.SetDestination(hit.point);
-        //        marker.transform.position = hit.point;
-        //    }
-        //}
 
 
     }
+
 
     public void SetToFollow(Vector3 destination)
     {

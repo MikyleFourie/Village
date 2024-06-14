@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class UIController : MonoBehaviour
+public class UIController2 : MonoBehaviour
 {
     [SerializeField] private GameObject dialoguePanel;
     private TextMeshProUGUI dailogueTextMesh;
@@ -26,7 +26,8 @@ public class UIController : MonoBehaviour
         "Press [R] to TOGGLE RED Villagers",
         "While RED is TOGGLED: \n  [Click] to move ONE red Villager",
         "While RED is TOGGLED: \n  Press [SPACE] to call all Red Villagers back",
-        "Press [R] to TOGGLE RED Villagers\nWhile RED is TOGGLED: \n  [Click] to move ONE red Villager \n  Press [SPACE] to call all Red Villagers back"
+        "Press <color=red>[R]</color> to TOGGLE RED Villagers\nWhile <color=red>RED</color> is TOGGLED: \n  [Click] to move ONE <color=red>RED</color> Villager " +
+        "\n  Press [SPACE] to call all <color=red>RED</color> Villagers back"
 
     };
     private int tutorialTextsIndex = 0;
@@ -41,6 +42,8 @@ public class UIController : MonoBehaviour
         tutorialTextMesh = tutorialPanel.GetComponentInChildren<TextMeshProUGUI>();
         teamTextMesh = teamPanel.GetComponentInChildren<TextMeshProUGUI>();
         dialoguePanel.SetActive(false);
+        StartCoroutine(ShowBubble("I need to get up there somehow..."));
+        tutorialTextsIndex = 5;
         tutorialPanel.SetActive(true);
 
         UpdateTeamString();
@@ -84,7 +87,7 @@ public class UIController : MonoBehaviour
                 if (redPanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
                 {
                     tutorialTextsIndex++;
-                    StartCoroutine(ShowBubble("I need to get through the door up there..."));
+                    StartCoroutine(ShowBubble("I can Exit through that Archeway..."));
                 }
 
 

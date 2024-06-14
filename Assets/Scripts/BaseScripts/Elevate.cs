@@ -10,7 +10,7 @@ public class Elevate : MonoBehaviour
     [SerializeField] Vector3 start, bottom, middle, top;
     [SerializeField] private int numInTrig = 0;
     private IEnumerator currCo;
-    [SerializeField] private UIController UIController;
+    [SerializeField] private UIController2 UIController;
     void Start()
     {
         currCo = Go(1, duration);
